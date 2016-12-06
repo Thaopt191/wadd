@@ -1,0 +1,84 @@
+Zombie.find(1) : phan tu dau tien
+----
+t=zombie.find(1)
+t.graveyard="new name"
+t.save
+---
+t=zombie.find(1)
+t.destroy
+---
+Zombie.create
+
+==========================================================================
+---Define a Zombie model.
+class Zombie <ActiveRecord::Base
+
+end
+---Add a validation that checks for the presence of a Zombie's name
+app/models/zombie.rb
+validates_presence_of :name
+---Add a validation that checks for the uniqueness of a Zombie's name.
+validates_uniqueness_of :name
+---Validate both the uniqueness and the presence of a Zombie's name on a single line, using the new validation syntax.
+validates :name, presence: true, uniqueness: true
+---A Weapon belongs to a Zombie. Create that relationship.
+class Weapon < ActiveRecord::Base
+  belongs_to :zombie
+end
+---Assuming the models and relationships are properly defined, find all the weapons that belong to Zombie 'Ashley'.
+z = Zombie.find(1)
+z.weapons
+
+
+class Zombie < ActiveRecord::Base
+has_many :weapons
+end
+===============================================================================
+
+Print out the zombie's name and graveyard.
+app/views/zombies/show.html.erb
+<h1><%= zombie.name %></h1>
+
+<p>
+  <%= zombie.graveyard %>
+</p>
+
+
+Link to the zombie's show page. Use the zombie's name as the anchor text
+app/views/zombies/show.html.erb
+<p>
+<%= link_to zombie.name, zombie %>
+</p>
+
+
+Use an each block to print the names of all the zombies.
+app/views/zombies/index.html.erb
+<ul>
+<% zombies.each do |zombie| %>
+  <li><%= zombie.name %></li>
+<% end %>
+</ul>
+
+In the each block, if a zombie has more than one tweet, print out SMART ZOMBIE.
+app/views/zombies/index.html.erb
+
+<ul>
+  <% zombies.each do |zombie| %>
+    <li>
+      <%= zombie.name %>
+      <% if zombie.tweets.size > 1 %>
+      SMART ZOMBIE 
+      <% end %>
+    </li>
+  <% end %>
+</ul>
+
+In the each block, make the zombie's name link to its edit page.
+app/views/zombies/index.html.erb
+<ul>
+  <% zombies.each do |zombie| %>
+    <li>
+      <%= link_to zombie.name, edit_zombie_path(zombie) %>
+    </li>
+  <% end %>
+</ul>
