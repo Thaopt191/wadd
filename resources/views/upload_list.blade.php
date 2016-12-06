@@ -5,9 +5,6 @@ session_start();
 
 @extends('templates.template')
 @section('content')
-@if(Session::has("flash_mess"))
-	<div class="alert alert-success"> {{ Session::get("flash_mess") }} </div>
-@endif
 	@if($type == 1)
 		@if ($list == null)
 			<p>Chưa có sinh viên nộp hồ sơ</p>

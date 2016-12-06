@@ -26,5 +26,8 @@ Route::get("regis/i2","dang_ky_Khoa@non_upload");
 Route::get("regis/accept/{id}","dang_ky_Khoa@accept");
 Route::get("regis/sendmail/{id}","dang_ky_Khoa@send_mail");
 Route::get("chot_dang_ky","dang_ky_Khoa@chot_dang_ky");
-Route::get("export","Document@ExportStudent");
+Route::get("exs", "Document@ExportStudent");
+Route::get("export",function(){
+	return view("xuat_danh_sach");
+});
 

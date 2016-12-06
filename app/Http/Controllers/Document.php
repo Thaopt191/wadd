@@ -7,10 +7,14 @@ use App\tai_khoan;
 use App\sinh_vien;
 use App\de_tai;
 use App\giang_vien;
+use Carbon\Carbon;
 
 class Document extends Controller
 {
-    public function ExportStudent($filename="14020426.docx"){
+    public function ExportStudent(){
+    	$curr = Carbon::now();
+    	$time = ($curr->year)."-".($curr->month)."-".($curr->day);
+    	$filename="danh-sach-".$time.".docx";
         $PHPWord = new \PhpOffice\PhpWord\PhpWord();
 // New portrait section
         $section = $PHPWord->addSection();
@@ -22,10 +26,12 @@ class Document extends Controller
         $styleCellBTLR = array('name'=>'Verdana', 'size'=>14, 'color'=>'1B2232', 'valign'=>'center');
 // Define font style for first row
         $fontStyle = array('bold'=>true, 'align'=>'center');
+        $LabelStyle = array('bold'=>true, 'valign'=>'center', 'size'=>'25');
 // Add table style
         $PHPWord->addTableStyle('myOwnTableStyle', $styleTable, $styleFirstRow);
-        $section->addText("DANH SÁCH SINH VIÊN BẢO VỆ");
+        $section->addText("DANH SÁCH SINH VIÊN BẢO VỆ", $LabelStyle);
         $section->addText("==========================");
+        $section->addText("Ngày: ".$time, $fontStyle);
 // Add table
         $table = $section->addTable('myOwnTableStyle');
 // Add row
@@ -60,6 +66,6 @@ class Document extends Controller
         $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($PHPWord, 'Word2007');
         $objWriter->save($filename);
         \Session::flash("flash_mess","Export successfully!");
-        return view('static_pages/home');
+        return redirect()->back();
     }
 }
